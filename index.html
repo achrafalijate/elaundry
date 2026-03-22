@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eLaundry — On s'en occupe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:    #007788;
+      --teal-dk: #004d58;
+      --mint:    #AADDCC;
+      --mint-lt: #e6f5f0;
+      --brick:   #CC5544;
+      --white:   #FFFFFF;
+      --off:     #f4faf8;
+      --text:    #1a2e30;
+      --gray:    #6b8c8f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,119,136,.1);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(0,119,136,.12); }
+    .nav-logo { display: flex; align-items: center; gap: .6rem; text-decoration: none; }
+    .nav-logo svg { width: 36px; height: 36px; }
+    .nav-logo span { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--teal-dk); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--gray); font-weight: 500; font-size: .95rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-cta {
+      background: var(--teal); color: var(--white); padding: .6rem 1.4rem;
+      border-radius: 50px; font-weight: 600; font-size: .9rem; text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .nav-cta:hover { background: var(--teal-dk); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 2.5rem 4rem;
+      background: linear-gradient(135deg, var(--off) 0%, #d4eeea 100%);
+      position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; top: -120px; right: -120px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(170,221,204,.5) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block; background: var(--mint); color: var(--teal-dk);
+      font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      padding: .35rem 1rem; border-radius: 50px; margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      line-height: 1.1; color: var(--teal-dk);
+      margin-bottom: 1.2rem;
+    }
+    h1 em { font-style: italic; color: var(--teal); }
+    .hero-sub {
+      font-size: 1.15rem; color: var(--gray); line-height: 1.7;
+      max-width: 480px; margin-bottom: 2.5rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--teal); color: var(--white); padding: .85rem 2rem;
+      border-radius: 50px; font-weight: 600; font-size: 1rem; text-decoration: none;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 24px rgba(0,119,136,.3);
+    }
+    .btn-primary:hover { background: var(--teal-dk); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,119,136,.4); }
+    .btn-ghost {
+      border: 2px solid var(--teal); color: var(--teal); padding: .85rem 2rem;
+      border-radius: 50px; font-weight: 600; font-size: 1rem; text-decoration: none;
+      transition: all .2s;
+    }
+    .btn-ghost:hover { background: var(--teal); color: var(--white); }
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
+    .hero-card {
+      background: var(--white); border-radius: 24px;
+      padding: 2.5rem; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,119,136,.15);
+      max-width: 320px;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .hero-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .hero-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--teal-dk); margin-bottom: .5rem; }
+    .hero-card p { color: var(--gray); font-size: .95rem; }
+    .hero-steps {
+      display: flex; gap: .5rem; margin-top: 1.5rem;
+    }
+    .step-dot {
+      flex: 1; padding: .5rem; background: var(--mint-lt);
+      border-radius: 12px; font-size: .75rem; font-weight: 600;
+      color: var(--teal); text-align: center;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--teal-dk); color: var(--white);
+      display: flex; justify-content: space-around; padding: 2rem;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--mint); }
+    .stat-lbl { font-size: .85rem; color: rgba(255,255,255,.7); margin-top: .25rem; }
+
+    /* ── SECTIONS SHARED ── */
+    section { padding: 6rem 2.5rem; }
+    .section-tag {
+      display: inline-block; background: var(--mint-lt); color: var(--teal);
+      font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .9rem; border-radius: 50px; margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem); color: var(--teal-dk);
+      margin-bottom: 1rem; line-height: 1.15;
+    }
+    .section-intro { font-size: 1.1rem; color: var(--gray); max-width: 560px; line-height: 1.7; }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--white); }
+    .how-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem; margin-top: 3.5rem;
+    }
+    .how-card {
+      background: var(--off); border-radius: 20px; padding: 2rem;
+      border: 2px solid transparent; transition: border-color .3s, transform .3s;
+      position: relative; overflow: hidden;
+    }
+    .how-card::after {
+      content: attr(data-num);
+      position: absolute; top: -10px; right: 16px;
+      font-family: 'DM Serif Display', serif; font-size: 5rem;
+      color: var(--mint); line-height: 1; pointer-events: none;
+    }
+    .how-card:hover { border-color: var(--mint); transform: translateY(-4px); }
+    .how-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .how-card h3 { font-weight: 700; font-size: 1.1rem; color: var(--teal-dk); margin-bottom: .5rem; }
+    .how-card p { color: var(--gray); font-size: .9rem; line-height: 1.6; }
+
+    /* ── PRICING ── */
+    #pricing { background: var(--off); }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem; margin-top: 3.5rem; max-width: 900px;
+    }
+    .price-card {
+      background: var(--white); border-radius: 24px; padding: 2.5rem;
+      border: 2px solid #e0eeeb; transition: transform .3s, box-shadow .3s;
+      position: relative;
+    }
+    .price-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,119,136,.12); }
+    .price-card.featured {
+      background: var(--teal-dk); color: var(--white);
+      border-color: var(--teal-dk);
+    }
+    .price-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--brick); color: var(--white);
+      font-size: .75rem; font-weight: 700; padding: .25rem .9rem; border-radius: 50px;
+      letter-spacing: .05em; text-transform: uppercase;
+    }
+    .price-name { font-weight: 700; font-size: 1rem; color: var(--gray); margin-bottom: .5rem; }
+    .price-card.featured .price-name { color: rgba(255,255,255,.7); }
+    .price-amount { font-family: 'DM Serif Display', serif; font-size: 3rem; color: var(--teal-dk); line-height: 1; }
+    .price-card.featured .price-amount { color: var(--mint); }
+    .price-amount span { font-size: 1rem; font-family: 'DM Sans', sans-serif; font-weight: 400; }
+    .price-desc { color: var(--gray); font-size: .9rem; margin: 1rem 0 1.5rem; line-height: 1.6; }
+    .price-card.featured .price-desc { color: rgba(255,255,255,.75); }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-bottom: 2rem; }
+    .price-features li { font-size: .9rem; display: flex; gap: .5rem; align-items: flex-start; }
+    .price-features li::before { content: '✓'; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+    .price-card.featured .price-features li::before { color: var(--mint); }
+    .price-card.featured .price-features li { color: rgba(255,255,255,.9); }
+    .price-btn {
+      display: block; text-align: center; padding: .85rem;
+      border-radius: 50px; font-weight: 600; text-decoration: none;
+      background: var(--mint-lt); color: var(--teal-dk);
+      transition: background .2s;
+    }
+    .price-card.featured .price-btn { background: var(--mint); color: var(--teal-dk); }
+    .price-btn:hover { background: var(--mint); }
+
+    /* ── WHY US ── */
+    #why { background: var(--white); }
+    .why-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center; margin-top: 3.5rem;
+    }
+    .why-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .why-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .why-icon-wrap {
+      background: var(--mint-lt); border-radius: 14px;
+      padding: .8rem; font-size: 1.4rem; flex-shrink: 0;
+      width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+    }
+    .why-item h4 { font-weight: 700; color: var(--teal-dk); margin-bottom: .3rem; }
+    .why-item p { color: var(--gray); font-size: .9rem; line-height: 1.6; }
+    .why-visual {
+      background: linear-gradient(135deg, var(--teal-dk) 0%, #005f70 100%);
+      border-radius: 28px; padding: 3rem; color: var(--white);
+    }
+    .why-visual h3 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 2rem; color: var(--mint); }
+    .testimonial { background: rgba(255,255,255,.1); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; }
+    .testimonial p { font-size: .95rem; line-height: 1.6; margin-bottom: 1rem; color: rgba(255,255,255,.9); }
+    .testimonial-author { font-size: .85rem; color: var(--mint); font-weight: 600; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--teal-dk); color: var(--white); text-align: center; }
+    #contact h2 { color: var(--white); }
+    #contact .section-intro { color: rgba(255,255,255,.7); margin: 0 auto 2.5rem; }
+    .contact-form {
+      max-width: 480px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .contact-form input, .contact-form textarea {
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      border-radius: 12px; padding: .9rem 1.2rem;
+      color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 1rem;
+      outline: none; transition: border-color .2s;
+    }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,.4); }
+    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--mint); }
+    .contact-form textarea { min-height: 130px; resize: vertical; }
+    .btn-submit {
+      background: var(--mint); color: var(--teal-dk); padding: .95rem;
+      border-radius: 50px; font-weight: 700; font-size: 1rem;
+      border: none; cursor: pointer; transition: background .2s, transform .2s;
+    }
+    .btn-submit:hover { background: #c5f0e4; transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text); color: rgba(255,255,255,.6);
+      padding: 2.5rem; text-align: center; font-size: .9rem;
+    }
+    footer strong { color: var(--mint); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      #hero { grid-template-columns: 1fr; padding-top: 6rem; }
+      .hero-visual { display: none; }
+      .why-grid { grid-template-columns: 1fr; }
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 30 Q8 34 12 34 L28 34 Q32 34 32 30 L32 16 L28 12 L8 12 Z" stroke="#007788" stroke-width="2" fill="none"/>
+      <circle cx="13" cy="36" r="2" fill="#007788"/>
+      <circle cx="27" cy="36" r="2" fill="#007788"/>
+      <path d="M8 12 L10 8 L30 8 L32 12" stroke="#007788" stroke-width="2" fill="none"/>
+      <path d="M16 22 Q18 18 20 22 Q22 26 24 22" stroke="#007788" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M22 16 Q26 12 28 16 Q30 20 26 22 Q22 24 20 20" fill="#AADDCC" opacity=".8"/>
+    </svg>
+    <span>eLaundry</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">Comment ça marche</a></li>
+    <li><a href="#pricing">Tarifs</a></li>
+    <li><a href="#why">Pourquoi nous</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Commencer</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-text">
+    <div class="hero-badge">🌿 Service écologique · Winnipeg, MB</div>
+    <h1>La lessive,<br/><em>on s'en occupe.</em></h1>
+    <p class="hero-sub">eLaundry collecte, lave et livre votre linge propre en 24–48 h. Zéro effort de votre côté — juste des vêtements frais et parfaitement pliés.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">📦 Réserver une collecte</a>
+      <a href="#how" class="btn-ghost">Comment ça marche ?</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-icon">🧺</div>
+      <h3>eLaundry</h3>
+      <p>Collecte · Lavage · Livraison</p>
+      <div class="hero-steps">
+        <div class="step-dot">📥 Collecte</div>
+        <div class="step-dot">🫧 Lavage</div>
+        <div class="step-dot">🚐 Livraison</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">24h</div><div class="stat-lbl">Délai de livraison</div></div>
+  <div class="stat"><div class="stat-num">90%+</div><div class="stat-lbl">Satisfaction client visée</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-lbl">Produits écologiques</div></div>
+  <div class="stat"><div class="stat-num">Wpg</div><div class="stat-lbl">Basé à Winnipeg, MB</div></div>
+</div>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how">
+  <div class="section-tag">Le processus</div>
+  <h2>Simple comme bonjour</h2>
+  <p class="section-intro">Trois étapes claires, zéro tracas. Nous gérons tout pendant que vous profitez de votre temps libre.</p>
+  <div class="how-grid">
+    <div class="how-card fade-up" data-num="01">
+      <div class="how-icon">📅</div>
+      <h3>Planifiez la collecte</h3>
+      <p>Choisissez un créneau via notre appli ou par téléphone. Nous arrivons à domicile selon votre horaire.</p>
+    </div>
+    <div class="how-card fade-up" data-num="02">
+      <div class="how-icon">🫧</div>
+      <h3>Nous lavons avec soin</h3>
+      <p>Lavage, séchage et pliage minutieux avec des produits écologiques, selon vos instructions spécifiques.</p>
+    </div>
+    <div class="how-card fade-up" data-num="03">
+      <div class="how-icon">🚐</div>
+      <h3>Livraison à votre porte</h3>
+      <p>Votre linge propre et plié est livré en 24 à 48 heures. Suivez votre commande en temps réel.</p>
+    </div>
+    <div class="how-card fade-up" data-num="04">
+      <div class="how-icon">📱</div>
+      <h3>Suivi numérique</h3>
+      <p>Gérez vos abonnements, planifiez et suivez l'état de vos commandes depuis votre téléphone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ── -->
+<section id="pricing">
+  <div class="section-tag">Nos tarifs</div>
+  <h2>Formules transparentes</h2>
+  <p class="section-intro">Des prix clairs, sans surprise. Choisissez la formule qui correspond à votre rythme de vie.</p>
+  <div class="pricing-grid">
+    <div class="price-card fade-up">
+      <div class="price-name">Ponctuel</div>
+      <div class="price-amount">$25<span> / sac</span></div>
+      <div class="price-desc">Idéal pour tester le service ou les besoins occasionnels.</div>
+      <ul class="price-features">
+        <li>1 sac de linge standard</li>
+        <li>Lavage & pliage inclus</li>
+        <li>Livraison en 48 h</li>
+        <li>Suivi par appli</li>
+      </ul>
+      <a href="#contact" class="price-btn">Choisir</a>
+    </div>
+    <div class="price-card featured fade-up">
+      <div class="price-badge">⭐ Populaire</div>
+      <div class="price-name">Abonnement mensuel</div>
+      <div class="price-amount">$89<span> / mois</span></div>
+      <div class="price-desc">4 collectes par mois — parfait pour les familles actives.</div>
+      <ul class="price-features">
+        <li>4 collectes / mois</li>
+        <li>2 sacs par collecte</li>
+        <li>Livraison prioritaire 24 h</li>
+        <li>Produits doux disponibles</li>
+        <li>Programme de référence</li>
+      </ul>
+      <a href="#contact" class="price-btn">Choisir</a>
+    </div>
+    <div class="price-card fade-up">
+      <div class="price-name">Sénior &amp; Famille</div>
+      <div class="price-amount">$69<span> / mois</span></div>
+      <div class="price-desc">Tarif spécial pour les personnes âgées et familles monoparentales.</div>
+      <ul class="price-features">
+        <li>4 collectes / mois</li>
+        <li>Contact humain garanti</li>
+        <li>Réservation par téléphone</li>
+        <li>Produits hypoallergéniques</li>
+      </ul>
+      <a href="#contact" class="price-btn">Choisir</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY US ── -->
+<section id="why">
+  <div class="why-grid">
+    <div>
+      <div class="section-tag">Nos valeurs</div>
+      <h2>Pourquoi choisir eLaundry ?</h2>
+      <div class="why-list">
+        <div class="why-item fade-up">
+          <div class="why-icon-wrap">🌿</div>
+          <div>
+            <h4>Écologique par principe</h4>
+            <p>Produits de lavage biodégradables, sacs réutilisables et gestion responsable de l'eau.</p>
+          </div>
+        </div>
+        <div class="why-item fade-up">
+          <div class="why-icon-wrap">🔒</div>
+          <div>
+            <h4>Discrétion & confiance</h4>
+            <p>Employés vérifiés, respect total de votre domicile et de vos affaires personnelles.</p>
+          </div>
+        </div>
+        <div class="why-item fade-up">
+          <div class="why-icon-wrap">🤝</div>
+          <div>
+            <h4>Service humain</h4>
+            <p>Attention particulière aux besoins des aînés et des familles — une vraie relation de confiance.</p>
+          </div>
+        </div>
+        <div class="why-item fade-up">
+          <div class="why-icon-wrap">📍</div>
+          <div>
+            <h4>100 % local à Winnipeg</h4>
+            <p>Fondé ici, pour les résidents d'ici. Nous connaissons votre quartier et votre communauté.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual fade-up">
+      <h3>Ce que nos clients disent</h3>
+      <div class="testimonial">
+        <p>« eLaundry me sauve tellement de temps chaque semaine ! Je rentre du travail et mon linge est déjà propre et plié. »</p>
+        <div class="testimonial-author">— Marie T., maman de 3 enfants · St. Vital</div>
+      </div>
+      <div class="testimonial">
+        <p>« À mon âge, c'est difficile de porter les sacs lourds. Avec eLaundry, tout se passe sans effort — et les employés sont si polis ! »</p>
+        <div class="testimonial-author">— Gérard L., 72 ans · River Heights</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="section-tag" style="background:rgba(170,221,204,.2); color:var(--mint);">Nous contacter</div>
+  <h2>Prêt à déléguer votre lessive ?</h2>
+  <p class="section-intro">Laissez-nous vos coordonnées et nous vous recontactons dans les 24 heures pour organiser votre première collecte.</p>
+  <form class="contact-form" onsubmit="handleSubmit(event)">
+    <input type="text" placeholder="Votre nom complet" required />
+    <input type="email" placeholder="Votre adresse courriel" required />
+    <input type="tel" placeholder="Votre numéro de téléphone" />
+    <input type="text" placeholder="Votre quartier à Winnipeg" />
+    <textarea placeholder="Message ou questions (optionnel)"></textarea>
+    <button type="submit" class="btn-submit">📦 Réserver ma première collecte</button>
+  </form>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p><strong>eLaundry</strong> · On s'en occupe · Winnipeg, Manitoba 🍁</p>
+  <p style="margin-top:.5rem;">Projet d'entrepreneuriat · Université du Manitoba · 2026</p>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Fade-up on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-submit');
+    btn.textContent = '✅ Demande envoyée ! Nous vous contactons bientôt.';
+    btn.style.background = '#c5f0e4';
+    btn.disabled = true;
+  }
+</script>
+</body>
+</html>
